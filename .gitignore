@@ -16,6 +16,7 @@ dist/
 backend/.venv/
 venv/
 myenv/
+data/
 ENV/
 env/
 
