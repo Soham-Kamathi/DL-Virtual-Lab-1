@@ -1,8 +1,9 @@
 fastapi
-uvicorn
-scikit-learn
-pandas
+uvicorn[standard]
+torch
+torchvision
 numpy
-python-multipart
+scikit-image
 matplotlib
-scipy
+python-multipart
+pydantic

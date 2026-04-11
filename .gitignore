@@ -15,6 +15,7 @@ dist/
 *$py.class
 backend/.venv/
 venv/
+myenv/
 ENV/
 env/
 
