@@ -7,3 +7,4 @@ scikit-image
 matplotlib
 python-multipart
 pydantic
+tqdm

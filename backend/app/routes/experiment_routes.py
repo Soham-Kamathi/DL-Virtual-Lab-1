@@ -59,19 +59,23 @@ def get_models(request: Request) -> list[str]:
 
 
 @router.get("/metrics")
-def get_metrics(request: Request):
+def get_metrics(request: Request, model_type: str = "denoising_autoencoder"):
     service = _get_inference_service(request)
+    if model_type not in service.get_available_models():
+        raise HTTPException(status_code=400, detail="Unsupported model_type")
     try:
-        return _select_required_metrics(service.get_saved_metrics())
+        return _select_required_metrics(service.get_saved_metrics(model_type=model_type))
     except ArtifactNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get("/sample-images")
-def get_sample_images(request: Request) -> dict[str, str]:
+def get_sample_images(request: Request, model_type: str = "denoising_autoencoder") -> dict[str, str]:
     service = _get_inference_service(request)
+    if model_type not in service.get_available_models():
+        raise HTTPException(status_code=400, detail="Unsupported model_type")
     try:
-        return service.get_sample_image_urls()
+        return service.get_sample_image_urls(model_type=model_type)
     except ArtifactNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
@@ -84,8 +88,14 @@ def run_experiment(payload: RunExperimentRequest, request: Request):
         raise HTTPException(status_code=400, detail="Unsupported model_type")
 
     try:
-        metrics = _select_required_metrics(service.get_saved_metrics())
-        images = service.get_sample_image_urls()
+        artifacts = service.get_experiment_artifacts(
+            model_type=payload.model_type,
+            noise_factor=payload.noise_factor,
+            latent_dim=payload.latent_dim,
+        )
+        metrics = _select_required_metrics(artifacts["metrics"])
+        images = artifacts["images"]
+        secondary_images = artifacts.get("secondary_images")
     except ArtifactNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
@@ -93,6 +103,13 @@ def run_experiment(payload: RunExperimentRequest, request: Request):
         "status": "success",
         "metrics": metrics,
         "images": images,
+        "secondary_images": secondary_images,
+        "selected_preset": artifacts["selected_preset"],
+        "requested_params": {
+            "model_type": payload.model_type,
+            "noise_factor": payload.noise_factor,
+            "latent_dim": payload.latent_dim,
+        },
     }
 
 
