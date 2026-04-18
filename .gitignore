@@ -31,3 +31,6 @@ yarn-error.log*
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Ignore trained Keras models
+*.keras

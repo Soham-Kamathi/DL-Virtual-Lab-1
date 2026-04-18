@@ -12,9 +12,11 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     import data_loader
     import model
+    from routers import exp5
 except ImportError:
     from . import data_loader
     from . import model
+    from .routers import exp5
 
 import uvicorn
 
@@ -23,11 +25,14 @@ app = FastAPI(title="MLP MNIST Virtual Lab API")
 # Enable CORS for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(exp5.router)
+
 
 
 class MLPParams(BaseModel):
