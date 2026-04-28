@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #3399cc; /* Light Blue for V-Lab Title Style */
+  --accent: #ff6600;  /* Official V-Lab Orange */
+  --header-bg: #ffffff;
+}
+
+body {
+  color: #333333;
+  background: #f8fafc;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  color: var(--primary);
+  font-weight: 400; /* V-Lab uses a lighter weight for main ANN title */
+}
+
+.lab-card {
+  @apply bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6;
+}
+
+.sidebar-link {
+  @apply block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-900 rounded-md transition-colors;
+}
+
+.sidebar-link-active {
+  @apply bg-blue-900 text-white hover:bg-blue-800 focus:bg-blue-800;
+}

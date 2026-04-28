@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+torch
+torchvision
+numpy
+scikit-image
+matplotlib
+python-multipart
+pydantic
+tqdm
